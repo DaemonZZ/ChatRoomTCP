@@ -44,6 +44,14 @@ public class TCPClient {
         }
     }
 
+    public void disconnect(){
+        try {
+            sk.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Socket getSk() {
         return sk;
     }
@@ -85,10 +93,15 @@ class ReadThreadClient extends Thread{
         try {
             sk= TCPClient.cl.getSk();
             while (true){
-                ois = new ObjectInputStream(sk.getInputStream());
-                Message ms = (Message) ois.readObject();
-                System.out.println(ms.getContent());
-                ClientGUI.c.getMsgBox().append(ms.getSender()+": "+ms.getContent()+"\n");
+                if(!sk.isClosed()){
+                    ois = new ObjectInputStream(sk.getInputStream());
+                    Message ms = (Message) ois.readObject();
+                    System.out.println(ms.getContent());
+                    ClientGUI.c.getMsgBox().append(ms.getSender()+": "+ms.getContent()+"\n");
+                }else {
+                    break;
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();

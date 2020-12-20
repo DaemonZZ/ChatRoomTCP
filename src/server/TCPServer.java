@@ -1,6 +1,7 @@
 package server;
 
 import client.ClientGUI;
+import client.TCPClient;
 import common.Message;
 import common.User;
 
@@ -58,8 +59,9 @@ public class TCPServer extends Thread {
                 msgBox.append("<Người dùng "+userName+" đã tham gia phòng chat>\n");
                 ReadThread readThread = new ReadThread(user);
                 readThread.start();
-                WriteThread writeThread = new WriteThread(user);
-                writeThread.start();
+                DisconnectClientListener listener = new DisconnectClientListener(user);
+                listener.start();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
@@ -119,10 +121,10 @@ class ReadThread extends Thread{
     }
 }
 
-class WriteThread extends Thread{
+class DisconnectClientListener extends Thread{
     private User user;
 
-    public WriteThread(User user) {
+    public DisconnectClientListener(User user) {
         this.user = user;
     }
 
@@ -132,6 +134,17 @@ class WriteThread extends Thread{
 
     @Override
     public void run() {
-
+        Socket sk = user.getSocket();
+        try {
+            DataInputStream dis = new DataInputStream(sk.getInputStream());
+            int s= dis.readInt();
+            if(s==0){
+                TCPServer.listUser.remove(user);
+                user.getSocket().close();
+                ServerGUI.s.getMesBox().append("<Người dùng "+user.getName()+" đã rời phòng chat>");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
