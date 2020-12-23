@@ -2,6 +2,8 @@ package client;
 
 import common.Message;
 import common.User;
+import ftp.FPTConnection;
+import ftp.FtpGUI;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -39,6 +41,25 @@ public class ClientGuiController implements ItemListener, ActionListener {
                 }
             }
         }
+        if(e.getActionCommand().equals("Files")){
+            new FtpGUI();
+
+        }
+        if(e.getActionCommand().equals("Gửi file")){
+            JFileChooser fc = new JFileChooser();
+            String path = "";
+            if(fc.showOpenDialog(view)==JFileChooser.APPROVE_OPTION){
+                path = fc.getSelectedFile().getAbsolutePath();
+                FPTConnection conn = new FPTConnection();
+                conn.connect();
+                if(conn.upload(path)){
+                    JOptionPane.showMessageDialog(view,"Gửi file thành công");
+                }
+                else {
+                    JOptionPane.showMessageDialog(view,"Gửi file thất bại");
+                }
+            }
+        }
     }
 
     @Override
@@ -51,7 +72,7 @@ public class ClientGuiController implements ItemListener, ActionListener {
             else {
                  client = new TCPClient("localhost",25255, view.getMsgBox(), view.getTxtName().getText());
                 client.connectToServer();
-
+                view.getTxtName().setEnabled(false);
             }
         }
         else {
@@ -60,6 +81,7 @@ public class ClientGuiController implements ItemListener, ActionListener {
                     DataOutputStream dos = new DataOutputStream(client.getSk().getOutputStream());
                     dos.writeInt(0);
                     client.disconnect();
+                    view.getTxtName().setEnabled(true);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }

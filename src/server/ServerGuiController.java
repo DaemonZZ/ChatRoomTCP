@@ -2,6 +2,9 @@ package server;
 
 import common.Message;
 import common.User;
+import ftp.FPTConnection;
+import ftp.FtpGUI;
+import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -39,6 +42,25 @@ public class ServerGuiController implements ActionListener, ItemListener {
                     view.getTxtmes().setText("");
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
+                }
+            }
+        }
+        if(e.getActionCommand().equals("Files")){
+            new FtpGUI();
+
+        }
+        if(e.getActionCommand().equals("Gửi file")){
+            JFileChooser fc = new JFileChooser();
+            String path = "";
+            if(fc.showOpenDialog(view)==JFileChooser.APPROVE_OPTION){
+                path = fc.getSelectedFile().getAbsolutePath();
+                FPTConnection conn = new FPTConnection();
+                conn.connect();
+                if(conn.upload(path)){
+                    JOptionPane.showMessageDialog(view,"Gửi file thành công");
+                }
+                else {
+                    JOptionPane.showMessageDialog(view,"Gửi file thất bại");
                 }
             }
         }

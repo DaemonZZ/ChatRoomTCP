@@ -52,7 +52,7 @@ public class ServerGUI extends JFrame {
 		powerSwitch.setBorder(null);
 		powerSwitch.setHorizontalAlignment(JToggleButton.CENTER);
 
-		 btnUsers = new JButton("Users");
+		 btnUsers = new JButton("Gửi file");
 		btnUsers.setBounds(348, 101, 76, 23);
 		contentPane.add(btnUsers);
 

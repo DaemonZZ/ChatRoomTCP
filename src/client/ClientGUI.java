@@ -47,11 +47,11 @@ public class ClientGUI extends JFrame {
 		powerSwitch.setBorder(null);
 		powerSwitch.setHorizontalAlignment(JToggleButton.CENTER);
 		
-		 btnUser = new JButton("Users");
+		 btnUser = new JButton("Gửi file");
 		btnUser.setBounds(342, 116, 89, 23);
 		getContentPane().add(btnUser);
 		
-		 btnFile = new JButton("Gửi File");
+		 btnFile = new JButton("Files");
 		btnFile.setBounds(342, 192, 89, 23);
 		getContentPane().add(btnFile);
 		

@@ -59,8 +59,8 @@ public class TCPServer extends Thread {
                 msgBox.append("<Người dùng "+userName+" đã tham gia phòng chat>\n");
                 ReadThread readThread = new ReadThread(user);
                 readThread.start();
-                DisconnectClientListener listener = new DisconnectClientListener(user);
-                listener.start();
+                //DisconnectClientListener listener = new DisconnectClientListener(user);
+                //listener.start();
 
             } catch (IOException e) {
                 e.printStackTrace();
